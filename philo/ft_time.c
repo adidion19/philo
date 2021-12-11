@@ -1,30 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_error_management.c                              :+:      :+:    :+:   */
+/*   ft_time.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adidion <adidion@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/19 17:08:57 by adidion           #+#    #+#             */
-/*   Updated: 2021/10/21 17:29:24 by adidion          ###   ########.fr       */
+/*   Created: 2021/10/21 10:25:18 by adidion           #+#    #+#             */
+/*   Updated: 2021/12/11 13:57:46 by adidion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	ft_simple_errors(int ac, char **av)
+long int	actual_time(void)
 {
-	int	i;
+	long int			time;
+	struct timeval		current_time;
 
-	if (ac != 5 && ac != 6)
-		return (printf("Error :\nYou should give 4 or 5 argument\n"));
-	i = 0;
-	while (av[++i])
-		if (ft_isnum(av[i]) == 0)
-			return (printf("Error\nArguments must be entire postive numbers\n"));
-	i = 0;
-	while (av[++i])
-		if (ft_strtol(av[i]) <= 0)
-			return (printf("Error\nThe numbers could not be too big or = 0\n"));
-	return (0);
+	time = 0;
+	if (gettimeofday(&current_time, NULL) == -1)
+		return (0);
+	time = (current_time.tv_sec * 1000) + (current_time.tv_usec / 1000);
+	return (time);
+}
+
+void	ft_usleep(long int time_in_ms)
+{
+	long int	start_time;
+
+	start_time = 0;
+	start_time = actual_time();
+	while ((actual_time() - start_time) < time_in_ms)
+		usleep(time_in_ms / 10);
 }

@@ -1,30 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_error_management.c                              :+:      :+:    :+:   */
+/*   ft_analyse_arguments.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adidion <adidion@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/19 17:08:57 by adidion           #+#    #+#             */
-/*   Updated: 2021/10/21 17:29:24 by adidion          ###   ########.fr       */
+/*   Created: 2021/10/20 13:02:25 by adidion           #+#    #+#             */
+/*   Updated: 2021/10/25 15:55:29 by adidion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	ft_simple_errors(int ac, char **av)
+t_philo	ft_analyse_arguments(char **av, int ac)
 {
-	int	i;
+	t_philo	philo;
 
-	if (ac != 5 && ac != 6)
-		return (printf("Error :\nYou should give 4 or 5 argument\n"));
-	i = 0;
-	while (av[++i])
-		if (ft_isnum(av[i]) == 0)
-			return (printf("Error\nArguments must be entire postive numbers\n"));
-	i = 0;
-	while (av[++i])
-		if (ft_strtol(av[i]) <= 0)
-			return (printf("Error\nThe numbers could not be too big or = 0\n"));
-	return (0);
+	philo.num_philo = ft_strtol(av[1]);
+	philo.num_fork = ft_strtol(av[1]);
+	philo.time_to_die = ft_strtol(av[2]);
+	philo.time_to_eat = ft_strtol(av[3]);
+	philo.time_to_sleep = ft_strtol(av[4]);
+	if (ac == 6)
+		philo.num_of_eat = ft_strtol(av[5]);
+	else
+		philo.num_of_eat = 0;
+	philo.time = actual_time();
+	return (philo);
 }

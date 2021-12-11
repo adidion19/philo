@@ -12,9 +12,21 @@
 
 #include "philo.h"
 
+int	ft_strlen(char *str)
+{
+	int	i;
+
+	i = -1;
+	if (!str)
+		return (0);
+	while (str[++i])
+		;
+	return (i);
+}
+
 int	ft_isnum(char *str)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	while (str[++i])
@@ -25,8 +37,8 @@ int	ft_isnum(char *str)
 
 static int	ft_isspace(char c)
 {
-	if (c == '\n' || c == ' ' || c == '\t' ||
-	c == '\v' || c == '\f' || c == '\r')
+	if (c == '\n' || c == ' ' || c == '\t'
+		|| c == '\v' || c == '\f' || c == '\r')
 		return (1);
 	return (0);
 }
