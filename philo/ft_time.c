@@ -6,7 +6,7 @@
 /*   By: adidion <adidion@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 10:25:18 by adidion           #+#    #+#             */
-/*   Updated: 2021/12/11 13:57:46 by adidion          ###   ########.fr       */
+/*   Updated: 2021/12/16 14:46:45 by adidion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,5 @@ void	ft_usleep(long int time_in_ms)
 	start_time = 0;
 	start_time = actual_time();
 	while ((actual_time() - start_time) < time_in_ms)
-		usleep(time_in_ms / 10);
+		usleep(time_in_ms * 2);
 }

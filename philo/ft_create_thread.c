@@ -6,13 +6,13 @@
 /*   By: adidion <adidion@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:49:07 by adidion           #+#    #+#             */
-/*   Updated: 2021/12/15 19:00:54 by adidion          ###   ########.fr       */
+/*   Updated: 2021/12/16 16:27:44 by adidion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static void	ft_putchar(char c, int fd)
+void	ft_putchar(char c, int fd)
 {
 	write(fd, &c, 1);
 }
@@ -20,31 +20,30 @@ static void	ft_putchar(char c, int fd)
 void	ft_putnbr_fd(int nb, int fd)
 {
 	unsigned int	a;
+	char c;
 
-	if (nb < 0)
-	{
-		write(fd, "-", 1);
-		a = -nb;
-	}
-	else
-		a = nb;
+	a = nb;
 	if (a >= 10)
 	{
+		c = a % 10 + '0';
 		ft_putnbr_fd(a / 10, fd);
-		ft_putchar(a % 10 + '0', fd);
+		write(fd, &c, 1);
 	}
 	else
-		ft_putchar(a + '0', fd);
+	{
+		c = a + '0';
+		write(fd, &c, 1);
+	}
 }
 
-int	ft_write_mutex(t_p *p, int bool)
+t_p	*ft_write_mutex(t_p *p, int bool)
 {
 	pthread_mutex_lock(&p->pa->write);
 	ft_putnbr_fd((int)actual_time() - p->pa->time, 1);
 	write(1, " ", 1);
 	ft_putnbr_fd((int)p->id, 1);
-	if (actual_time() - p->ms_since_last_eat < p->pa->time_to_die)
-	{
+	//if (actual_time() - p->ms_since_last_eat <= p->pa->time_to_die)
+	//{
 		if (bool == 1)
 			write(1, " has taken a fork\n", 18);
 		if (bool == 2)
@@ -54,13 +53,14 @@ int	ft_write_mutex(t_p *p, int bool)
 		if (bool == 4)
 			write(1, " is thinking\n", 14);
 		pthread_mutex_unlock(&p->pa->write);
-		return (0);
-	}
-	else
-	{
-		write(1, " has died\n", 10);
-		return (1);
-	}
+		return (p);
+	//}
+	//else
+	//{
+	//	write(1, " died\n", 6);
+	//	p->pa->status = p->id;
+	//	return (0);
+	//}
 }
 
 t_p	*ft_eat(t_p *p)
@@ -69,13 +69,20 @@ t_p	*ft_eat(t_p *p)
 		pthread_mutex_lock(&p->l_f);
 	else
 		pthread_mutex_lock(p->r_f);
-	ft_write_mutex(p, 1);
+	p = ft_write_mutex(p, 1);
+	if (!p)
+		return (0);
 	if (p->id % 2 == 0)
 		pthread_mutex_lock(p->r_f);
 	else
 		pthread_mutex_lock(&p->l_f);
-	ft_write_mutex(p, 1);
-	ft_write_mutex(p, 2);
+	p = ft_write_mutex(p, 1);
+	if (!p)
+		return (0);
+	//if (actual_time() - p->ms_since_last_eat <= p->pa->time_to_die)
+	p = ft_write_mutex(p, 2);
+	if (!p)
+		return (0);
 	p->num_eat--;
 	p->ms_since_last_eat = actual_time();
 	ft_usleep(p->pa->time_to_eat);
@@ -84,10 +91,13 @@ t_p	*ft_eat(t_p *p)
 	return (p);
 }
 
-void	ft_sleep(t_p *p)
+t_p	*ft_sleep(t_p *p)
 {
-	ft_write_mutex(p, 3);
+	p = ft_write_mutex(p, 3);
+	if (!p)
+		return (0);
 	ft_usleep(p->pa->time_to_sleep);
+	return (p);
 }
 
 void	*threas(void *phi)
@@ -95,15 +105,29 @@ void	*threas(void *phi)
 	t_p		*p;
 
 	p = (t_p *)phi;
-	if (p->id % 2 == 0)
+	if (p->pa->num_philo % 2 == 1)
+	{
+		if (p->id % 3 == 2)
+			ft_usleep(p->pa->time_to_eat + p->pa->time_to_eat / 10);
+		if (p->id % 3 == 1)
+			ft_usleep(p->pa->time_to_eat / 10);
+	}
+	else if (p->id % 2 == 0)
 		ft_usleep(p->pa->time_to_eat / 10);
+	//p->ms_since_last_eat = actual_time();
 	while (p->num_eat)
 	{
 		p = ft_eat(p);
+		if (!p)
+			return (0);
 		if (!p->num_eat)
 			break ;
-		ft_sleep(p);
-		ft_write_mutex(p, 4);
+		p = ft_sleep(p);
+		if (!p)
+			return (0);
+		p = ft_write_mutex(p, 4);
+		if (!p)
+			return (0);
 	}
 	if (!p->num_eat)
 		return (phi);
@@ -136,6 +160,7 @@ void	ft_create_thread(t_philo *philo)
 	philo = ft_mutex_init(philo);
 	pthread_mutex_init(&philo->a.write, NULL);
 	philo->a.time = actual_time();
+	philo->a.status = 0;
 	while (philo->a.num_philo > ++i)
 	{
 		philo->p[i].num_eat = philo->a.num_of_eat;
@@ -144,7 +169,25 @@ void	ft_create_thread(t_philo *philo)
 		philo->p[i].ms_since_last_eat = actual_time();
 		pthread_create(&philo->p->thread, NULL, threas, &philo->p[i]);
 	}
-	while (1);
 	//while (0 < --i)
 	//	pthread_join(philo->p[i].thread, NULL);
+	//while (!philo->a.status)
+	//	;
+	while (1)
+	{
+		i = -1;
+		while (philo->a.num_philo > ++i)
+		{
+			if (actual_time() - philo->p[i].ms_since_last_eat > philo->p[i].pa->time_to_die)
+			{
+				pthread_mutex_lock(&philo->a.write);
+				ft_putnbr_fd((int)actual_time() - philo->a.time, 1);
+				write(1, " ", 1);
+				ft_putnbr_fd((int)philo->p[i].id, 1);
+				write(1, " died\n", 6);
+				return ;
+				//p->pa->status = p->id;
+			}
+		}
+	}
 }

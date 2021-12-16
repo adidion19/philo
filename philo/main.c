@@ -6,7 +6,7 @@
 /*   By: adidion <adidion@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/19 16:39:30 by adidion           #+#    #+#             */
-/*   Updated: 2021/12/13 17:39:11 by adidion          ###   ########.fr       */
+/*   Updated: 2021/12/16 14:49:46 by adidion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int	main(int ac, char **av)
 	t_philo	*philo;
 
 	philo = malloc(sizeof(t_philo));
+	if (!philo)
+		return (0);
 	if (ft_simple_errors(ac, av))
 		return (1);
 	philo->p = malloc(sizeof(t_p) * ((ft_strtol(av[1]) + 1)));

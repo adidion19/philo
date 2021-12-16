@@ -6,7 +6,7 @@
 /*   By: adidion <adidion@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/19 17:09:37 by adidion           #+#    #+#             */
-/*   Updated: 2021/12/14 14:49:11 by adidion          ###   ########.fr       */
+/*   Updated: 2021/12/16 12:12:57 by adidion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ typedef struct s_a
 	long			num_of_eat;
 	pthread_mutex_t	write;
 	long			time;
+	int				status;
 }	t_a;
 
 typedef struct s_p
