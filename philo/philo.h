@@ -6,7 +6,7 @@
 /*   By: adidion <adidion@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/19 17:09:37 by adidion           #+#    #+#             */
-/*   Updated: 2021/10/25 15:55:39 by adidion          ###   ########.fr       */
+/*   Updated: 2021/12/14 14:49:11 by adidion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,21 +20,13 @@
 # include <sys/time.h>
 # include <unistd.h>
 
-typedef struct s_p
+typedef struct s_ph
 {
 	pthread_mutex_t	mutex;
 	int				i;
-}	t_p;
+}	t_ph;
 
-typedef struct s_philosopher
-{
-	pthread_t		thread;
-	int				place;
-	pthread_mutex_t	l_f;
-	pthread_mutex_t	*r_f;
-}	t_philosopher;
-
-typedef struct s_philo
+typedef struct s_a
 {
 	long			num_philo;
 	long			num_fork;
@@ -42,16 +34,33 @@ typedef struct s_philo
 	long			time_to_eat;
 	long			time_to_sleep;
 	long			num_of_eat;
+	pthread_mutex_t	write;
 	long			time;
+}	t_a;
+
+typedef struct s_p
+{
+	pthread_t		thread;
 	int				place;
-	t_philosopher	*philosopher;
+	pthread_mutex_t	l_f;
+	pthread_mutex_t	*r_f;
+	int				id;
+	int				num_eat;
+	long int		ms_since_last_eat;
+	t_a				*pa;
+}	t_p;
+
+typedef struct s_philo
+{
+	t_a				a;
+	t_p				*p;
 }	t_philo;
 
 int			ft_simple_errors(int ac, char **av);
 long		ft_strtol(const char *str);
 int			ft_isnum(char *str);
-t_philo		ft_analyse_arguments(char **av, int ac);
-void		ft_create_thread(t_philo philo);
+t_philo		*ft_analyse_arguments(char **av, int ac, t_philo *philo);
+void		ft_create_thread(t_philo *philo);
 long int	actual_time(void);
 void		ft_usleep(long int time_in_ms);
 int			ft_strlen(char *str);

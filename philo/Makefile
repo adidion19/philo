@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: adidion <marvin@42.fr>                     +#+  +:+       +#+         #
+#    By: adidion <adidion@student.s19.be>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/19 16:34:36 by adidion           #+#    #+#              #
-#    Updated: 2021/10/19 16:35:22 by adidion          ###   ########.fr        #
+#    Updated: 2021/12/11 16:44:34 by adidion          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = gcc
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -pthread
 
 NAME =	philo
 
