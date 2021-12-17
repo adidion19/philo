@@ -6,7 +6,7 @@
 /*   By: adidion <adidion@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:49:07 by adidion           #+#    #+#             */
-/*   Updated: 2021/12/16 16:27:44 by adidion          ###   ########.fr       */
+/*   Updated: 2021/12/17 15:40:49 by adidion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,9 @@ t_p	*ft_eat(t_p *p)
 	if (!p)
 		return (0);
 	p->num_eat--;
+	pthread_mutex_lock(&p->ms);
 	p->ms_since_last_eat = actual_time();
+	pthread_mutex_unlock(&p->ms);
 	ft_usleep(p->pa->time_to_eat);
 	pthread_mutex_unlock(p->r_f);
 	pthread_mutex_unlock(&p->l_f);
@@ -130,7 +132,12 @@ void	*threas(void *phi)
 			return (0);
 	}
 	if (!p->num_eat)
+	{
+		pthread_mutex_lock(&p->ms);
+		p->ms_since_last_eat = -1;
+		pthread_mutex_unlock(&p->ms);
 		return (phi);
+	}
 	return (0);
 }
 
@@ -143,6 +150,7 @@ t_philo	*ft_mutex_init(t_philo *philo)
 	{
 		philo->p[i].id = i + 1;
 		pthread_mutex_init(&philo ->p[i].l_f, NULL);
+		pthread_mutex_init(&philo ->p[i].ms, NULL);
 		if (i == philo->a.num_philo - 1)
 			philo->p[i].r_f = &philo->p[0].l_f;
 		else
@@ -155,6 +163,7 @@ t_philo	*ft_mutex_init(t_philo *philo)
 void	ft_create_thread(t_philo *philo)
 {
 	int	i;
+	int	philo_num;
 
 	i = -1;
 	philo = ft_mutex_init(philo);
@@ -169,25 +178,39 @@ void	ft_create_thread(t_philo *philo)
 		philo->p[i].ms_since_last_eat = actual_time();
 		pthread_create(&philo->p->thread, NULL, threas, &philo->p[i]);
 	}
-	//while (0 < --i)
-	//	pthread_join(philo->p[i].thread, NULL);
+	while (0 < --i)
+		pthread_join(philo->p[i].thread, NULL);
 	//while (!philo->a.status)
 	//	;
+	int j = 0;
+	philo_num = 0;
 	while (1)
 	{
 		i = -1;
 		while (philo->a.num_philo > ++i)
 		{
-			if (actual_time() - philo->p[i].ms_since_last_eat > philo->p[i].pa->time_to_die)
+			pthread_mutex_lock(&philo->p[j].ms);
+			if (philo->p[j].ms_since_last_eat == -1)
 			{
-				pthread_mutex_lock(&philo->a.write);
+				j++;
+				pthread_mutex_unlock(&philo->p[j].ms);
+				if (j == philo->a.num_philo)
+					return ; // ca rentre jamais ici
+			}
+			pthread_mutex_unlock(&philo->p[j].ms);
+			pthread_mutex_lock(&philo->p[i].ms);
+			if (philo->p[i].ms_since_last_eat != -1 && actual_time() - philo->p[i].ms_since_last_eat > philo->p[i].pa->time_to_die)
+			{
+				pthread_mutex_unlock(&philo->a.write);
 				ft_putnbr_fd((int)actual_time() - philo->a.time, 1);
 				write(1, " ", 1);
 				ft_putnbr_fd((int)philo->p[i].id, 1);
 				write(1, " died\n", 6);
+				pthread_mutex_unlock(&philo->p[i].ms);
 				return ;
 				//p->pa->status = p->id;
 			}
+			pthread_mutex_unlock(&philo->p[i].ms);
 		}
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: adidion <adidion@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/19 17:09:37 by adidion           #+#    #+#             */
-/*   Updated: 2021/12/16 12:12:57 by adidion          ###   ########.fr       */
+/*   Updated: 2021/12/17 15:27:05 by adidion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ typedef struct s_p
 	int				place;
 	pthread_mutex_t	l_f;
 	pthread_mutex_t	*r_f;
+	pthread_mutex_t	ms;
 	int				id;
 	int				num_eat;
 	long int		ms_since_last_eat;
