@@ -6,7 +6,7 @@
 /*   By: adidion <adidion@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/19 17:09:37 by adidion           #+#    #+#             */
-/*   Updated: 2021/12/17 15:27:05 by adidion          ###   ########.fr       */
+/*   Updated: 2021/12/30 16:20:03 by adidion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,5 +66,7 @@ void		ft_create_thread(t_philo *philo);
 long int	actual_time(void);
 void		ft_usleep(long int time_in_ms);
 int			ft_strlen(char *str);
+void		ft_putchar(char c, int fd);
+void		ft_putnbr_fd(int nb, int fd);
 
 #endif

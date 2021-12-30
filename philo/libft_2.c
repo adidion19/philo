@@ -1,30 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_error_management.c                              :+:      :+:    :+:   */
+/*   libft_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adidion <adidion@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/19 17:08:57 by adidion           #+#    #+#             */
-/*   Updated: 2021/12/30 16:13:52 by adidion          ###   ########.fr       */
+/*   Created: 2021/12/30 16:18:42 by adidion           #+#    #+#             */
+/*   Updated: 2021/12/30 16:37:15 by adidion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	ft_simple_errors(int ac, char **av)
+void	ft_putchar(char c, int fd)
 {
-	int	i;
+	write(fd, &c, 1);
+}
 
-	if (ac != 5 && ac != 6)
-		return (printf("Error :\nYou should give 4 or 5 argument\n"));
-	i = 0;
-	while (av[++i])
-		if (ft_isnum(av[i]) == 0)
-			return (printf("Error\nArguments must be entire postive numbers\n"));
-	i = 0;
-	while (av[++i])
-		if (ft_strtol(av[i]) <= 0)
-			return (printf("Error\nThe numbers could not be too big or = 0\n"));
-	return (0);
+void	ft_putnbr_fd(int nb, int fd)
+{
+	unsigned int	a;
+	char			c;
+
+	a = nb;
+	if (a >= 10)
+	{
+		c = a % 10 + '0';
+		ft_putnbr_fd(a / 10, fd);
+		write(fd, &c, 1);
+	}
+	else
+	{
+		c = a + '0';
+		write(fd, &c, 1);
+	}
 }

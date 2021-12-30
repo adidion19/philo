@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft_1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adidion <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: adidion <adidion@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 11:27:15 by adidion           #+#    #+#             */
-/*   Updated: 2021/10/20 11:27:29 by adidion          ###   ########.fr       */
+/*   Updated: 2021/12/30 17:31:26 by adidion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,15 @@ static int	ft_isspace(char c)
 	return (0);
 }
 
+int	ft_ternary(long long ans, int neg)
+{
+	if (neg > 0)
+		ans = -1;
+	else
+		ans = 0;
+	return (ans);
+}
+
 long	ft_strtol(const char *str)
 {
 	unsigned long long	i;
@@ -67,7 +76,7 @@ long	ft_strtol(const char *str)
 		j++;
 	}
 	if (ans < 0 || j > 19)
-		return (ans = (neg > 0) ? -1 : 0);
+		return (ft_ternary (ans, neg));
 	ans = ans * neg;
 	return ((long)ans);
 }

@@ -6,7 +6,7 @@
 #    By: adidion <adidion@student.s19.be>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/19 16:34:36 by adidion           #+#    #+#              #
-#    Updated: 2021/12/11 16:44:34 by adidion          ###   ########.fr        #
+#    Updated: 2021/12/30 16:20:25 by adidion          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,7 @@ SRCS =	main.c\
 		ft_analyse_arguments.c\
 		ft_create_thread.c\
 		ft_time.c\
+		libft_2.c\
 
 OBJS = $(SRCS:.c=.o)
 
