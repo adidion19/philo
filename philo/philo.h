@@ -6,7 +6,7 @@
 /*   By: adidion <adidion@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/19 17:09:37 by adidion           #+#    #+#             */
-/*   Updated: 2021/12/30 16:20:03 by adidion          ###   ########.fr       */
+/*   Updated: 2021/12/31 10:48:59 by adidion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,6 @@
 # include <stdlib.h>
 # include <sys/time.h>
 # include <unistd.h>
-
-typedef struct s_ph
-{
-	pthread_mutex_t	mutex;
-	int				i;
-}	t_ph;
 
 typedef struct s_a
 {
@@ -68,5 +62,13 @@ void		ft_usleep(long int time_in_ms);
 int			ft_strlen(char *str);
 void		ft_putchar(char c, int fd);
 void		ft_putnbr_fd(int nb, int fd);
+t_p			*ft_routine(t_p *p);
+t_p			*ft_sleep(t_p *p);
+t_p			*ft_eat(t_p *p);
+t_p			*ft_write_mutex(t_p *p, int bool);
+t_philo		*ft_death(int i, t_philo *philo);
+t_philo		*ft_verify_death(int i, t_philo *philo);
+t_philo		*ft_verify_num(int *k, int *j, t_philo *philo);
+t_philo		*ft_free(t_philo *philo);
 
 #endif
