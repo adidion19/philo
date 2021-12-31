@@ -6,11 +6,11 @@
 #    By: adidion <adidion@student.s19.be>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/19 16:34:36 by adidion           #+#    #+#              #
-#    Updated: 2021/12/31 10:49:38 by adidion          ###   ########.fr        #
+#    Updated: 2021/12/31 11:03:38 by adidion          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CC = gcc
+CC = cc
 
 CFLAGS = -Wall -Wextra -Werror -pthread
 
